@@ -8,24 +8,32 @@ const port = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-const TARGET_API = 'https://pamiecai.pl/api/proxy.php?api_key=WZ0c_6M%2B';
+// Nie doklejamy klucza do URL
+const TARGET_API = 'https://pamiecai.pl/api/proxy.php';
 
 app.post('/proxy', async (req, res) => {
   try {
-    const response = await axios.post(TARGET_API, req.body, {
+    // Upewniamy się, że zawsze dodajemy poprawny klucz API w body
+    const proxyRequest = {
+      ...req.body,
+      apiKey: 'WZ0c_6M+'
+    };
+
+    const response = await axios.post(TARGET_API, proxyRequest, {
       headers: {
         'Content-Type': 'application/json',
       }
     });
+
     res.status(response.status).json(response.data);
   } catch (error) {
-  console.error('Błąd proxy:', error.toJSON ? error.toJSON() : error);
-  res.status(500).json({
-    error: true,
-    message: error.message,
-    response: error.response?.data || null
-  });
-}
+    console.error('Błąd proxy:', error.toJSON ? error.toJSON() : error);
+    res.status(500).json({
+      error: true,
+      message: error.message,
+      response: error.response?.data || null
+    });
+  }
 });
 
 app.listen(port, () => {
