@@ -8,7 +8,7 @@ const port = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-const TARGET_API = 'https://pamiecai.pl/api/proxy.php?api_key=WZ0c_6M+';
+const TARGET_API = 'https://pamiecai.pl/api/proxy.php?api_key=WZ0c_6M%2B';
 
 app.post('/proxy', async (req, res) => {
   try {
