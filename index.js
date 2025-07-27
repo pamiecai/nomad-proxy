@@ -19,12 +19,13 @@ app.post('/proxy', async (req, res) => {
     });
     res.status(response.status).json(response.data);
   } catch (error) {
-    res.status(error.response?.status || 500).json({
-      error: true,
-      message: error.message,
-      response: error.response?.data || null
-    });
-  }
+  console.error('Błąd proxy:', error.toJSON ? error.toJSON() : error);
+  res.status(500).json({
+    error: true,
+    message: error.message,
+    response: error.response?.data || null
+  });
+}
 });
 
 app.listen(port, () => {
